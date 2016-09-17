@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	fs := http.FileServer(http.Dir("../../"))
+	fs := http.FileServer(http.Dir("../../../videos"))
 	http.Handle("/", http.StripPrefix("/", fs))
 	http.ListenAndServe(":8080", nil)
 }
