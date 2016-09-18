@@ -9,32 +9,40 @@ import (
 )
 
 func main() {
-    scanCams()
+    //cams := scanCams()
+    //audioDevices := scanAudio()
+    //fmt.Println(cams)
+    //fmt.Println(audioDevices) 
+    //startWebcam() 
+    startWebserver()      
 
 }
 
 /**
+*   TODO: make this database driven
 *   Retrieves available webcams attached to network.
 *   @return [array of cam names as strings]
 */
-func scanCams() {
-  cmd := exec.Command("ls", "/dev/video*")
-  out, err := cmd.Output()
-  check(err)
-  fmt.Print(string(out))
+func scanCams() []string { 
+	//Declare active cameras here 
+	cams := []string{"/dev/video0"}
+	return cams
 }
 
-/**
-*   Retrieves available audio devices attached to network.
-*   @return [array of audio devices as strings]
-*/
-func scanAudio() {
-
+func scanAudio() []string {
+	//Declare 
+	audioDevices := []string{"U0x46d0x825"}
+ 	return audioDevices	
 }
+
 
 //Takes the name of the webcam and starts recording inside of a go routine.
 func startWebcam() {
-
+	cmd := exec.Command("avconv", "-f", "video4linux2", "-r", "25", "-i", "/dev/video0", "-f", "alsa", "-i", "plughw:U0x46d0x825,0", "-ar", "22050", "-ab", "64k", "-strict", "experimental", "-acodec", "aac", "-vcodec", "mpeg4", "-y", "webcam1.mp4", "/dev/video0")
+	out, err := cmd.Output()
+	check(err)
+	fmt.Print(string(out))
+	
 }
 
 func startWebserver() {
@@ -45,7 +53,7 @@ func startWebserver() {
 }
 
 //Get the current utc timestamp, write time to text file
-func heartBeat() {
+func writeTimestamp() {
   now := time.Now().UTC().Format("20060102150405")
   timestamp := []byte(now)
   err := ioutil.WriteFile("./timestamp.txt", timestamp, 0644)
