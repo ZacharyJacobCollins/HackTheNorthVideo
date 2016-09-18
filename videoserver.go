@@ -39,7 +39,7 @@ func scanAudio() []string {
 
 //Takes the name of the webcam and starts recording inside of a go routine.
 func startWebcam() {
-	cmd := exec.Command("./startcam.sh")
+	cmd := exec.Command("timeout", "30s", "./startcam.sh")
 	out, err := cmd.Output()
 	check(err)
 	fmt.Print(string(out))
