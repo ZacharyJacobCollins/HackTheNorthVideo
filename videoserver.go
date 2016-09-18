@@ -1,18 +1,27 @@
 package main
 
 import (
-    "fmt"
     "net/http"
     "time"
+    "io/ioutil"
 )
 
 func main() {
-	currentTime := time.Now().UTC.Format("2006-05-05 15:00:00")
+	//Get the current utc timestamp
+	now := time.Now().UTC().Format("20060102150405")
 
-	fmt.Println(currentTime);
+	//write time to text file 
+	timestamp := []byte(now)
+	err := ioutil.WriteFile("./timestamp.txt", timestamp, 0644)
+	if (err != nil) {
+		panic(err)
+	}
 
+
+	
 	//Start the webserver
 	fs := http.FileServer(http.Dir("../../../../../videos"))
 	http.Handle("/", http.StripPrefix("/", fs))
 	http.ListenAndServe(":8080", nil)
 }
+
