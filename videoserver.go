@@ -13,9 +13,12 @@ func main() {
     //audioDevices := scanAudio()
     //fmt.Println(cams)
     //fmt.Println(audioDevices) 
-    go startWebcam()
-    startWebserver()      
+    //startWebserver()
     
+    for {
+    	go startWebcam()
+ 	time.Sleep(time.Second * 10)
+    }
 
 }
 
@@ -39,7 +42,7 @@ func scanAudio() []string {
 
 //Takes the name of the webcam and starts recording inside of a go routine.
 func startWebcam() {
-	cmd := exec.Command("timeout", "30s", "./startcam.sh")
+	cmd := exec.Command("timeout", "10s", "./startcam.sh")
 	out, err := cmd.Output()
 	check(err)
 	fmt.Print(string(out))
